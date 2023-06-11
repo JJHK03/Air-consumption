@@ -75,6 +75,9 @@ try:
         df2_1 = df2[df2['瞬間流量L/min']<= low_flow]
         st.bar_chart(df2_1)
         df2_1mean = df2_1.mean()
+        df2_2 = df2[df2['瞬間流量L/min']>= low_flow]
+        df2_2 = df2_2.mean()
+        
 
     with tab2:
         st.header("積算流量")
@@ -108,7 +111,7 @@ try:
         cost = float(air_consum)*float(air_cost)
         st.write('エアコスト','{:.2f}'.format(cost),'円')
         
-        st.header("瞬間流量時のコスト")
+        st.header("低流量時のコスト")
         #消費流量
         air_consum2 = float(float(df2_1mean)*60*int(Ope_hour)*(int(Ope_ratio)/100)/1000)
         st.write('消費流量','{:.2f}'.format(air_consum2),'m3')
@@ -116,6 +119,17 @@ try:
         #Cost
         cost2 = float(air_consum2)*float(air_cost)
         st.write('エアコスト','{:.2f}'.format(cost2), '円')
+        
+        st.header("通常流量時のコスト")
+        #消費流量
+        air_consum3 = float(float(df2_2mean)*60*int(Ope_hour)*(int(Ope_ratio)/100)/1000)
+        st.write('消費流量','{:.2f}'.format(air_consum3),'m3')
+
+        #Cost
+        cost3 = float(air_consum3)*float(air_cost)
+        st.write('エアコスト','{:.2f}'.format(cost3), '円')
+        
+        
         
     with tab5:
         st.header("全体のCO2排出量")
