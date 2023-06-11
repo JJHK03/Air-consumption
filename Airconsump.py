@@ -45,7 +45,7 @@ try:
     df2 = df2.drop(drop_col1, axis = 1)
     df2 = df2.set_index('Time')
     df2_mean = df2.mean()
-
+    
 
 
 
@@ -69,16 +69,15 @@ try:
         st.header("瞬間流量をグラフで表示")
         df2
         st.bar_chart(df2)
-        
-        st.header("低流量時の瞬間流量をグラフで表示")
         low_flow = float(st.number_input("低流量時の流量を記入してください:L/min"))
         df2_1 = df2[df2['瞬間流量L/min']<= low_flow]
         st.bar_chart(df2_1)
         df2_1mean = df2_1.mean()
+        st.write('低流量平均流量',float(df2_1mean))
         df2_2 = df2[df2['瞬間流量L/min']>= low_flow]
-        df2_2 = df2_2.mean()
+        df2_2mean = df2_2.mean()
+        st.write('通常流量平均流量',float(df2_2mean))
         
-
     with tab2:
         st.header("積算流量")
         df1
@@ -101,46 +100,73 @@ try:
         st.write('設備稼働率', Ope_ratio, '%')
         st.write('時間',int(Ope_hour)*60*(int(Ope_ratio)/100),'(分)/日')
         
+        Ope_days = st.number_input('年間稼働日は？')
+        st.write('年間稼働日', Ope_days, '日')
+        
+        
         st.header("全体のコスト")
         
         #消費流量
         air_consum = float(float(df2_mean)*60*int(Ope_hour)*(int(Ope_ratio)/100)/1000)
         st.write('消費流量','{:.2f}'.format(air_consum),'m3')
+        
 
         #Cost
         cost = float(air_consum)*float(air_cost)
-        st.write('エアコスト','{:.2f}'.format(cost),'円')
+        st.write('一日あたりのエアコスト','{:.2f}'.format(cost),'円')
+        
+        cost_1 = float(cost)*int(Ope_days)
+        st.write('年間コスト''{:.2f}'.format(cost_1),'円')
+        
         
         st.header("低流量時のコスト")
+        
         #消費流量
         air_consum2 = float(float(df2_1mean)*60*int(Ope_hour)*(int(Ope_ratio)/100)/1000)
         st.write('消費流量','{:.2f}'.format(air_consum2),'m3')
 
         #Cost
         cost2 = float(air_consum2)*float(air_cost)
-        st.write('エアコスト','{:.2f}'.format(cost2), '円')
+        st.write('一日あたりのエアコスト','{:.2f}'.format(cost2), '円')
+        
+        cost_2 = float(cost2)*int(Ope_days)
+        st.write('年間コスト''{:.2f}'.format(cost_2),'円')
+        
         
         st.header("通常流量時のコスト")
+        
         #消費流量
         air_consum3 = float(float(df2_2mean)*60*int(Ope_hour)*(int(Ope_ratio)/100)/1000)
         st.write('消費流量','{:.2f}'.format(air_consum3),'m3')
 
         #Cost
         cost3 = float(air_consum3)*float(air_cost)
-        st.write('エアコスト','{:.2f}'.format(cost3), '円')
+        st.write('一日あたりのエアコスト','{:.2f}'.format(cost3), '円')
         
-        
+        cost_3 = float(cost3)*int(Ope_days)
+        st.write('年間コスト''{:.2f}'.format(cost_3),'円')
         
     with tab5:
         st.header("全体のCO2排出量")
         emitted_CO2 = 0.0586
         A_emitted_CO2 = float(air_consum)*float(emitted_CO2)
-        st.write('{:.2f}'.format(A_emitted_CO2), 'KgCO2/m3')
+        st.write('一に当たり排出量''{:.2f}'.format(A_emitted_CO2), 'KgCO2/m3')
         
-        st.header("低い流量時のCO2排出量")
+        A_emitted_CO2_year = float(A_emitted_CO2)*float(Ope_days)
+        st.write('年間排出量''{:.2f}'.format(A_emitted_CO2_year), 'KgCO2/m3')
+        
+        st.header("一日あたり低流量時のCO2排出量")
         emitted_CO2_1 = 0.0586
         A_emitted_CO2_1 = float(air_consum2)*float(emitted_CO2_1)
         st.write('{:.2f}'.format(A_emitted_CO2_1), 'KgCO2/m3')
+        
+        
+        
+        st.header("一日あたり通常流量時のCO2排出量")
+        emitted_CO2_2 = 0.0586
+        A_emitted_CO2_2 = float(air_consum3)*float(emitted_CO2_2)
+        st.write('{:.2f}'.format(A_emitted_CO2_2), 'KgCO2/m3')
+
 
 except:
     st.error("Oh......error")
