@@ -32,7 +32,7 @@ try:
     def edit_df(df):
         drop_col = ['DataType','StatusCode','ServerTimeStamp']
         df = df.drop(drop_col,axis = 1)
-        df['SourceTimeStamp'] = df['SourceTimeStamp'].str[11:-5]#タイムスタンプの桁数調整
+        df['SourceTimeStamp'] = df['SourceTimeStamp'].str[11:-1]#タイムスタンプの桁数調整
         return df
 
 
