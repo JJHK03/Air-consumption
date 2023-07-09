@@ -27,7 +27,7 @@ try:
 
 
     # st.write('瞬間流量,圧力,積算流量')
-    tab1, tab2, tab3, tab4, tab5 = st.tabs(["瞬間流量", "積算流量", "圧力","コスト","CO2排出量"])
+    tab1, tab2, tab3, tab4, tab5, tab6= st.tabs(["瞬間流量", "積算流量", "圧力","コスト","CO2排出量","電力量"])
 
     def edit_df(df):
         drop_col = ['DataType','StatusCode','ServerTimeStamp']
@@ -166,7 +166,28 @@ try:
         emitted_CO2_2 = 0.0586
         A_emitted_CO2_2 = float(air_consum3)*float(emitted_CO2_2)
         st.write('{:.2f}'.format(A_emitted_CO2_2), 'KgCO2/m3')
-
-
+        
+    with tab6:
+        st.header("全体の電力量")
+        power_consump = 0.100
+        A_power_consump  = float(air_consum)*float(power_consump)
+        st.write('一に当たり電力量''{:.2f}'.format(A_power_consump), 'kWh/m3')
+        
+        A_power_consump_year = float(A_emitted_CO2)*float(Ope_days)
+        st.write('年間電力量''{:.2f}'.format(A_power_consump_year), 'kWh/m3')
+        
+        st.header("一日あたり低流量時の電力量")
+        power_consump_1 = 0.100
+        A_power_consump_1 = float(air_consum2)*float(power_consump_1)
+        st.write('{:.2f}'.format(A_power_consump_1), 'kWh/m3')
+        
+        
+        
+        st.header("一日あたり通常流量時の電力量")
+        power_consump_2 = 0.100
+        A_power_consump_2 = float(air_consum3)*float(power_consump_2)
+        st.write('{:.2f}'.format(A_power_consump_2), 'kWh/m3')
+    
+    
 except:
     st.error("Oh......error")
